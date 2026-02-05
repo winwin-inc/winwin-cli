@@ -1,0 +1,34 @@
+knowledge_bases:
+- name: test-kb
+  path: /var/folders/1q/qnp12xys4g39p4j6ssygm0840000gp/T/tmp62743h8o/docs
+  description: null
+  enabled: false
+  index_path: null
+  extensions:
+  - .md
+  - .txt
+  - .html
+  - .htm
+  - .csv
+  - .json
+  - .xml
+  - .docx
+  - .doc
+  - .pptx
+  - .xlsx
+  - .xls
+  - .pdf
+  - .jpg
+  - .jpeg
+  - .png
+  - .gif
+  - .bmp
+  - .webp
+  - .wav
+  - .mp3
+  - .m4a
+  - .mp4
+  - .avi
+  - .mov
+  - .mkv
+  - .zip
