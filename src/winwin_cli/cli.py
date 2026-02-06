@@ -23,8 +23,14 @@ def _import_kb_search():
 
 def _import_convert():
     """延迟导入 convert 模块"""
-    from winwin_cli.convert import convert
+    from winwin_cli.convert.cli import convert
     return convert
+
+
+def _import_skills():
+    """延迟导入 skills 模块"""
+    from winwin_cli.skills.cli import skills
+    return skills
 
 
 # 注册子命令
@@ -37,6 +43,12 @@ except ImportError:
 try:
     convert_cmd = _import_convert()
     main.add_command(convert_cmd)
+except ImportError:
+    pass
+
+try:
+    skills_cmd = _import_skills()
+    main.add_command(skills_cmd, "skills")
 except ImportError:
     pass
 
