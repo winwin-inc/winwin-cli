@@ -1,6 +1,6 @@
 knowledge_bases:
 - name: test-kb
-  path: /var/folders/1q/qnp12xys4g39p4j6ssygm0840000gp/T/tmp62743h8o/docs
+  path: /var/folders/1q/qnp12xys4g39p4j6ssygm0840000gp/T/tmpnk9zfnvb/docs
   description: null
   enabled: false
   index_path: null

@@ -60,6 +60,47 @@ winwin-cli convert document.docx output.md
 winwin-cli convert document.pdf --format text
 ```
 
+### skills - 技能管理命令
+
+安装和管理 Claude Code 等平台的技能。
+
+**特性：**
+- 交互式技能安装
+- 支持多平台（Claude Code、OpenCode）
+- 自动解析技能元数据
+- JSON 输出格式，便于 AI 调用
+- 自定义安装路径
+
+**使用方法：**
+```bash
+# 列出所有可用技能
+winwin-cli skills list
+
+# 查看技能详情
+winwin-cli skills info git-workflow
+
+# 交互式安装（推荐）
+winwin-cli skills install
+
+# 安装到当前目录
+winwin-cli skills install git-workflow
+
+# 安装到指定目录
+winwin-cli skills install git-workflow /path/to/project
+
+# 指定平台
+winwin-cli skills install git-workflow --platform claude-code
+
+# JSON 格式输出（AI 调用）
+winwin-cli skills list --json
+```
+
+**包含的技能：**
+- `git-workflow` - Git 工作流助手（提交规范、分支管理、PR 检查）
+- `code-review` - 代码审查助手（质量、安全、性能检查）
+
+更多技能参见 [skills/README.md](skills/README.md)
+
 ## 开发
 
 **环境设置：**
@@ -91,6 +132,9 @@ winwin-cli/
 ├── src/winwin_cli/       # 源代码
 │   ├── cli.py           # 主入口
 │   ├── convert.py       # 文档转换模块
+│   ├── skills/          # 技能管理模块
+│   │   ├── cli.py       # skills 命令行
+│   │   └── __init__.py
 │   └── kb_search/       # 知识库检索模块
 │       ├── cli.py       # kb-search 命令行
 │       ├── config.py    # 配置管理
@@ -98,6 +142,10 @@ winwin-cli/
 │       ├── search.py    # 搜索引擎
 │       ├── models.py    # 数据模型
 │       └── commands/    # 子命令
+├── skills/              # 技能定义目录
+│   ├── git-workflow/    # Git 工作流技能
+│   ├── code-review/     # 代码审查技能
+│   └── README.md        # 技能文档
 ├── tests/               # 测试文件
 ├── docs/                # 文档
 └── pyproject.toml       # 项目配置
