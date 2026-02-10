@@ -33,9 +33,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/winwin-cli"
-Repository = "https://github.com/yourusername/winwin-cli"
-Issues = "https://github.com/yourusername/winwin-cli/issues"
+Homepage = "https://github.com/winwin-inc/winwin-cli"
+Repository = "https://github.com/winwin-inc/winwin-cli"
+Issues = "https://github.com/winwin-inc/winwin-cli/issues"
 
 [project.scripts]
 winwin-cli = "winwin_cli.cli:main"
