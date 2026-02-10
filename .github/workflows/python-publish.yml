@@ -42,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - release-build
+    permissions:
+      contents: read
 
     steps:
       - name: Retrieve release distributions
@@ -50,8 +52,10 @@ jobs:
           name: release-dists
           path: dist/
 
-      - name: Publish release distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: dist/
-          password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Publish to PyPI
+        run: |
+          $HOME/.local/bin/uv publish --publish-url https://upload.pypi.org/legacy/ --token ${{ secrets.PYPI_API_TOKEN }}
