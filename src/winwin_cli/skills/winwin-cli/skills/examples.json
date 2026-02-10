@@ -1,0 +1,65 @@
+{
+  "list_skills": {
+    "description": "列出所有可用技能",
+    "command": "winwin-cli skills list",
+    "expected_output": "显示所有技能的列表"
+  },
+  "list_skills_json": {
+    "description": "以 JSON 格式列出技能（AI 推荐）",
+    "command": "winwin-cli skills list --json",
+    "expected_output": "JSON 格式的技能列表",
+    "json_example": [
+      {
+        "name": "git-workflow",
+        "description": "Git 工作流管理技能",
+        "version": "1.0.0",
+        "author": "Your Name",
+        "path": "/path/to/skills/git-workflow"
+      }
+    ]
+  },
+  "skill_info": {
+    "description": "查看技能详细信息",
+    "command": "winwin-cli skills info git-workflow",
+    "expected_output": "显示技能的详细信息和文件列表"
+  },
+  "install_to_current": {
+    "description": "安装技能到当前目录",
+    "command": "winwin-cli skills install git-workflow --platform claude-code",
+    "expected_behavior": "技能安装到 ./.claude/plugins/skills/"
+  },
+  "install_to_path": {
+    "description": "安装技能到指定目录",
+    "command": "winwin-cli skills install git-workflow /path/to/project --platform claude-code",
+    "expected_behavior": "技能安装到指定目录的 .claude/plugins/skills/"
+  },
+  "batch_install": {
+    "description": "批量安装多个技能",
+    "commands": [
+      "winwin-cli skills install git-workflow --platform claude-code",
+      "winwin-cli skills install code-review --platform claude-code",
+      "winwin-cli skills install test-helper --platform claude-code"
+    ],
+    "expected_behavior": "依次安装所有技能"
+  },
+  "ai_integration": {
+    "description": "AI 调用示例（Python）",
+    "code": "import subprocess\n\ndef install_skill(skill_name, project_path, platform='claude-code'):\n    cmd = ['winwin-cli', 'skills', 'install', skill_name, project_path, '--platform', platform]\n    result = subprocess.run(cmd, capture_output=True, text=True)\n\n    if result.returncode == 0:\n        print(f'✓ {skill_name} 安装成功')\n        return True\n    else:\n        print(f'✗ 安装失败: {result.stderr}')\n        return False\n\n# 使用示例\ninstall_skill('git-workflow', '/path/to/project')",
+    "expected_behavior": "非交互式安装技能"
+  },
+  "find_and_install": {
+    "description": "查找并安装相关技能",
+    "steps": [
+      "winwin-cli skills list --json > skills.json",
+      "cat skills.json | grep 'git'",
+      "winwin-cli skills info git-workflow",
+      "winwin-cli skills install git-workflow --platform claude-code"
+    ],
+    "expected_behavior": "完整的技能发现和安装流程"
+  },
+  "check_before_install": {
+    "description": "安装前检查技能是否存在",
+    "code": "import subprocess\nimport json\n\ndef safe_install(skill_name, project_path):\n    # 获取可用技能\n    result = subprocess.run(['winwin-cli', 'skills', 'list', '--json'], capture_output=True, text=True)\n    skills = json.loads(result.stdout)\n    skill_names = [s['name'] for s in skills]\n\n    if skill_name not in skill_names:\n        print(f'错误: 技能 {skill_name} 不存在')\n        return False\n\n    # 安装技能\n    cmd = ['winwin-cli', 'skills', 'install', skill_name, project_path, '--platform', 'claude-code']\n    result = subprocess.run(cmd, capture_output=True, text=True)\n    return result.returncode == 0",
+    "expected_behavior": "安全的技能安装流程"
+  }
+}

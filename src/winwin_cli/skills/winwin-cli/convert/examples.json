@@ -1,0 +1,52 @@
+{
+  "single_file": {
+    "description": "转换单个文件",
+    "command": "winwin-cli convert document.docx",
+    "expected_output": "document.md"
+  },
+  "single_file_with_output": {
+    "description": "转换单个文件并指定输出路径",
+    "command": "winwin-cli convert document.docx -o output.md",
+    "expected_output": "output.md"
+  },
+  "batch_convert": {
+    "description": "批量转换目录中的所有文件",
+    "command": "winwin-cli convert ./docs -o ./markdown",
+    "expected_behavior": "保持目录结构，转换所有支持的格式"
+  },
+  "filter_by_extension": {
+    "description": "只转换 PDF 和 Word 文档",
+    "command": "winwin-cli convert ./docs -o ./markdown --ext .pdf --ext .docx",
+    "expected_behavior": "只转换指定扩展名的文件"
+  },
+  "overwrite_existing": {
+    "description": "覆盖已存在的 Markdown 文件",
+    "command": "winwin-cli convert ./docs --overwrite",
+    "expected_behavior": "覆盖已存在的 .md 文件"
+  },
+  "ocr_images": {
+    "description": "OCR 识别图片中的文字",
+    "command": "winwin-cli convert ./scanned-pages --ext .png --ext .jpg",
+    "expected_behavior": "提取图片中的文字内容"
+  },
+  "audio_transcription": {
+    "description": "音频转录为文字",
+    "command": "winwin-cli convert meeting.mp3 -o meeting.md",
+    "expected_behavior": "语音识别并生成文字记录"
+  },
+  "video_extraction": {
+    "description": "视频提取音频并转为文字",
+    "command": "winwin-cli convert interview.mp4 -o interview.md",
+    "expected_behavior": "提取音频轨道并转录"
+  },
+  "complex_example": {
+    "description": "复杂示例：只转换 Office 文档并覆盖",
+    "command": "winwin-cli convert ./docs -o ./markdown --ext .docx --ext .pptx --ext .xlsx --overwrite",
+    "expected_behavior": "只转换 Office 格式并覆盖已存在的文件"
+  },
+  "ai_integration": {
+    "description": "AI 调用示例（Python）",
+    "code": "import subprocess\n\nresult = subprocess.run(\n    ['winwin-cli', 'convert', 'document.docx', '-o', 'output.md'],\n    capture_output=True,\n    text=True\n)\n\nif result.returncode == 0:\n    print('转换成功')\nelse:\n    print(f'错误: {result.stderr}')",
+    "expected_behavior": "非交互式转换，检查返回码"
+  }
+}

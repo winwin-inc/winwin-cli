@@ -1,0 +1,77 @@
+{
+  "add_kb": {
+    "description": "添加知识库",
+    "command": "winwin-cli kb-search add ./docs --name project-docs",
+    "expected_behavior": "创建名为 project-docs 的知识库"
+  },
+  "list_kb": {
+    "description": "列出所有知识库",
+    "command": "winwin-cli kb-search list",
+    "expected_output": "显示所有知识库及其状态"
+  },
+  "index_kb": {
+    "description": "为知识库构建索引",
+    "command": "winwin-cli kb-search index project-docs",
+    "expected_behavior": "构建搜索索引"
+  },
+  "simple_search": {
+    "description": "简单搜索",
+    "command": "winwin-cli kb-search search \"API 设计\"",
+    "expected_output": "返回相关文档列表"
+  },
+  "json_search": {
+    "description": "JSON 输出搜索（AI 推荐）",
+    "command": "winwin-cli kb-search search \"API\" --json --limit 5",
+    "expected_output": "JSON 格式的搜索结果",
+    "json_example": {
+      "query": "API",
+      "results": [
+        {
+          "file": "/path/to/doc.md",
+          "score": 0.95,
+          "snippet": "相关内容片段"
+        }
+      ]
+    }
+  },
+  "search_with_content": {
+    "description": "搜索并返回完整内容",
+    "command": "winwin-cli kb-search search \"API\" --kb project-docs --json --content --limit 3",
+    "expected_behavior": "返回包含完整文档内容的 JSON"
+  },
+  "disable_kb": {
+    "description": "禁用知识库",
+    "command": "winwin-cli kb-search disable old-docs",
+    "expected_behavior": "知识库不再参与搜索"
+  },
+  "enable_kb": {
+    "description": "启用知识库",
+    "command": "winwin-cli kb-search enable project-docs",
+    "expected_behavior": "知识库重新参与搜索"
+  },
+  "remove_kb": {
+    "description": "移除知识库",
+    "command": "winwin-cli kb-search remove temp-docs",
+    "expected_behavior": "删除知识库配置"
+  },
+  "check_status": {
+    "description": "查看知识库状态",
+    "command": "winwin-cli kb-search status",
+    "expected_output": "显示所有知识库的索引状态"
+  },
+  "ai_integration": {
+    "description": "AI 调用示例（Python）",
+    "code": "import subprocess\nimport json\n\ndef search_kb(query, kb_name=None, limit=5):\n    cmd = ['winwin-cli', 'kb-search', 'search', query, '--json', '--limit', str(limit)]\n    if kb_name:\n        cmd.extend(['--kb', kb_name])\n\n    result = subprocess.run(cmd, capture_output=True, text=True)\n\n    if result.returncode == 0:\n        return json.loads(result.stdout)\n    return None\n\n# 使用示例\nresults = search_kb('API 设计', kb_name='project-docs', limit=3)\nprint(results)",
+    "expected_behavior": "返回结构化搜索结果"
+  },
+  "rag_workflow": {
+    "description": "RAG 系统工作流",
+    "steps": [
+      "winwin-cli convert ./docs -o ./markdown",
+      "winwin-cli kb-search add ./markdown --name my-kb",
+      "winwin-cli kb-search index my-kb",
+      "winwin-cli kb-search search \"用户问题\" --json --content"
+    ],
+    "expected_behavior": "完整的文档检索增强生成流程"
+  }
+}

@@ -44,13 +44,15 @@ winwin-cli 是一套专为 AI 使用设计的命令行工具集，提供知识�
 
 ### 🛠️ skills - 技能管理命令
 
-从 GitHub 仓库为 Claude Code 等 AI 工具安装和管理技能。
+从本地目录注册和安装 Claude Code 等AI 工具的技能。
 
-- **从 GitHub 仓库安装** - 支持从远程仓库下载技能
-- **多种安装方式** - 支持完整 URL、简写形式、交互式选择
+- **本地技能注册** - 将本地技能目录注册到 winwin-cli
+- **快速安装** - 使用简短名称从注册表安装技能
+- **技能管理** - 列出、取消注册已注册的技能
+- **从本地目录安装** - 支持直接从本地文件系统安装技能
+- **智能路径识别** - 自动识别 URL、本地目录或技能名称
 - **多平台支持** - Claude Code、OpenCode
 - **自动解析元数据** - 从 SKILL.md 提取技能信息
-- **自定义仓库** - 支持指定自定义技能仓库
 
 ## 🚀 快速开始
 
@@ -133,23 +135,27 @@ winwin-cli convert ./docs --ext .pdf --ext .docx
 **技能管理：**
 
 ```bash
-# 列出所有可用技能（从默认 GitHub 仓库）
+# 注册本地技能
+winwin-cli skills register /path/to/skill
+winwin-cli skills register ./my-skill --name custom-name
+
+# 列出所有已注册的技能
 winwin-cli skills list
 
-# 查看技能详情
-winwin-cli skills info skill-name
-
-# 交互式选择并安装技能
-winwin-cli skills install
-
-# 使用简写形式安装
+# 从注册表安装（使用技能名称）
 winwin-cli skills install skill-name
 
-# 指定仓库安装
-winwin-cli skills install owner/repo/skill-name
+# 从本地目录直接安装（不注册）
+winwin-cli skills install /path/to/local/skill
 
-# 使用完整 GitHub URL
-winwin-cli skills install https://github.com/owner/repo/tree/main/skill-name
+# 指定安装目标
+winwin-cli skills install skill-name --to /target/project
+
+# 指定平台
+winwin-cli skills install skill-name --platform claude-code
+
+# 取消注册
+winwin-cli skills unregister skill-name
 
 # JSON 格式输出（AI 调用）
 winwin-cli skills list --json
@@ -191,79 +197,109 @@ winwin-cli kb-search search my-kb "查询词" --limit 5
 
 ### skills 详细用法
 
-**配置默认技能仓库：**
+**注册技能：**
 
 ```bash
-# 通过环境变量设置默认仓库
-export WINWIN_SKILLS_REPO="heibaibufen/winwin-skills"
+# 注册单个技能
+winwin-cli skills register /path/to/skill
 
-# 或在命令中临时指定
-winwin-cli skills list --repo owner/custom-skills
+# 批量注册（从包含多个技能的目录）
+winwin-cli skills register /path/to/skills-collection
+
+# 使用自定义名称注册
+winwin-cli skills register /path/to/skill --name my-custom-name
+
+# 技能目录结构
+# 单个技能：
+my-skill/
+├── SKILL.md          # 必需：技能定义文件
+└── scripts/         # 可选：脚本目录
+
+# 技能集合（批量注册）：
+skills-collection/
+├── skill-a/SKILL.md
+├── skill-b/SKILL.md
+└── skill-c/SKILL.md
 ```
 
 **列出技能：**
 
 ```bash
-# 从默认仓库列出所有技能
+# 列出所有已注册的技能
 winwin-cli skills list
-
-# 指定分支
-winwin-cli skills list --branch develop
-
-# 指定仓库
-winwin-cli skills list --repo owner/custom-skills
 
 # JSON 格式输出
 winwin-cli skills list --json
 ```
 
-**查看技能信息：**
+**取消注册：**
 
 ```bash
-# 使用技能名称（默认仓库）
-winwin-cli skills info skill-name
-
-# 指定仓库
-winwin-cli skills info skill-name --repo owner/custom-skills
-
-# 指定分支
-winwin-cli skills info skill-name --branch feature-branch
+# 取消注册技能
+winwin-cli skills unregister skill-name
 ```
 
 **安装技能：**
 
 ```bash
-# 方式 1: 交互式选择
-winwin-cli skills install
-
-# 方式 2: 使用技能名称（默认仓库）
+# 从注册表安装（推荐）
 winwin-cli skills install skill-name
 
-# 方式 3: 指定仓库和技能
-winwin-cli skills install owner/repo/skill-name
+# 从本地目录直接安装（不注册）
+winwin-cli skills install /path/to/local/skill
 
-# 方式 4: 使用完整 GitHub URL
-winwin-cli skills install https://github.com/owner/repo/tree/main/skill-name
-
-# 指定安装路径
-winwin-cli skills install skill-name /path/to/project
+# 指定安装目标
+winwin-cli skills install skill-name --to /target/project
 
 # 指定平台
 winwin-cli skills install skill-name --platform claude-code
 
-# 指定分支
-winwin-cli skills install skill-name --branch develop
-
-# 覆盖默认仓库
-winwin-cli skills install skill-name --repo owner/custom-repo
-
 # 完整示例
-winwin-cli skills install my-skill ./my-project --platform claude-code --branch dev
+winwin-cli skills install my-skill --to ./my-project --platform claude-code
+```
+
+**工作流程：**
+
+```bash
+# 1. 开发技能
+mkdir my-skill
+echo "---\nname: my-skill\ndescription: My skill\n---\n" > my-skill/SKILL.md
+
+# 2. 注册技能
+winwin-cli skills register ./my-skill
+
+# 3. 查看已注册的技能
+winwin-cli skills list
+
+# 4. 安装到项目
+winwin-cli skills install my-skill --to ./my-project --platform claude-code
 ```
 
 **技能格式要求：**
 
-技能仓库支持按分类组织，结构如下：
+技能目录必须包含 `SKILL.md` 文件：
+
+```
+my-skill/
+├── SKILL.md          # 必需：技能定义文件（包含 YAML 前置元数据）
+├── scripts/          # 可选：脚本目录
+└── assets/           # 可选：资源文件
+```
+
+示例 SKILL.md：
+
+```markdown
+---
+name: my-skill
+description: 我的技能描述
+version: 1.0.0
+author: Your Name
+---
+
+# 技能使用说明
+
+...
+```
 
 ```
 owner/skills-repo/
