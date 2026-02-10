@@ -478,18 +478,18 @@ def unregister(skill_name: str):
     help="覆盖默认的 GitHub 仓库（格式: owner/repo）",
 )
 def install(skill_spec: Optional[str], path: Optional[str], target_path: Optional[str], platform: Optional[str], ref: str, repo: Optional[str]):
-    """安装技能（所有来源都会先注册到本地）
+    """安装技能
 
     工作流程：
-        1. GitHub URL → 下载 → 注册到本地缓存 → 安装
+        1. 技能名称 → 从注册表查找 → 安装
         2. 本地目录 → 注册 → 安装
-        3. 技能名称 → 从注册表查找 → 安装
+        3. 无参数 → 交互式从注册表选择
 
     用法：
-        winwin-cli skills install skill-name                # 从已注册的技能安装
-        winwin-cli skills install https://github.com/...    # 从 GitHub 下载并注册（推荐）
-        winwin-cli skills install /path/to/local/skill      # 从本地目录注册并安装
-        winwin-cli skills install ./my-skill --to /target   # 指定安装目标
+        winwin-cli skills install                      # 交互式选择已注册的技能
+        winwin-cli skills install skill-name          # 从注册表安装指定技能
+        winwin-cli skills install /path/to/local/skill # 从本地目录注册并安装
+        winwin-cli skills install skill-name --to /target  # 指定安装目标
     """
     try:
         # 确定安装路径（优先使用 --to，其次是 path，最后是当前目录）
@@ -502,9 +502,9 @@ def install(skill_spec: Optional[str], path: Optional[str], target_path: Optiona
         else:
             install_path = Path.cwd()
 
-        # 如果没有指定技能，显示列表供选择
+        # 如果没有指定技能，从注册表显示列表供选择
         if not skill_spec:
-            skill_spec = _interactive_select_skill(repo)
+            skill_spec = _interactive_select_from_registry()
             if not skill_spec:
                 click.echo("未选择技能", err=True)
                 sys.exit(1)
@@ -903,6 +903,42 @@ def _get_default_skills_repo() -> str:
     # 可以从环境变量或配置文件读取
     # 例如: export WINWIN_SKILLS_REPO="owner/skills-repo"
     return os.environ.get("WINWIN_SKILLS_REPO", "heibaibufen/winwin-skills")
+
+
+def _interactive_select_from_registry() -> Optional[str]:
+    """从注册表交互式选择技能"""
+    try:
+        registered_skills = _list_registered_skills()
+
+        if not registered_skills:
+            click.echo("未找到已注册的技能", err=True)
+            click.echo("\n提示:", err=True)
+            click.echo("  1. 使用 'winwin-cli skills register /path/to/skill' 注册技能", err=True)
+            click.echo("  2. 或直接指定路径: winwin-cli skills install /path/to/skill", err=True)
+            return None
+
+        click.echo("\n已注册的技能：")
+        for idx, skill in enumerate(registered_skills, 1):
+            skill_name = skill.get("name")
+            metadata = skill.get("metadata", {})
+            description = metadata.get("description", "无描述")
+            click.echo(f"  {idx}. {skill_name} - {description}")
+
+        # 让用户选择
+        choice = click.prompt("\n选择要安装的技能（输入序号）", type=int)
+        if choice < 1 or choice > len(registered_skills):
+            click.echo("无效的选择", err=True)
+            return None
+
+        selected_skill = registered_skills[choice - 1]
+        skill_name = selected_skill.get("name")
+        click.echo(f"\n已选择: {skill_name}")
+
+        return skill_name
+
+    except Exception as e:
+        click.echo(f"选择技能失败: {e}", err=True)
+        return None
 
 
 def _interactive_select_skill(repo_override: Optional[str]) -> Optional[str]:
