@@ -88,25 +88,36 @@ def _ensure_default_skills():
 def _load_registry() -> Dict:
     """加载注册表"""
     registry_file = _get_registry_file()
+    
+    # 如果不存在，尝试初始化默认技能
+    if not registry_file.exists():
+        _ensure_default_skills()
+    
+    # 再次检查是否存在
     if registry_file.exists():
         try:
             with open(registry_file, "r", encoding="utf-8") as f:
                 registry = yaml.safe_load(f) or {"skills": []}
-                # 确保默认技能已注册（只在注册表为空时）
-                if not registry.get("skills"):
+                # 再次确保至少有基本结构
+                if not isinstance(registry, dict):
+                    registry = {"skills": []}
+                if "skills" not in registry:
+                    registry["skills"] = []
+                    
+                # 如果注册表为空，再次尝试确保默认技能
+                if not registry["skills"]:
                     _ensure_default_skills()
-                    # 重新加载
+                    # 重新读取一次
                     with open(registry_file, "r", encoding="utf-8") as f:
-                        return yaml.safe_load(f) or {"skills": []}
+                        registry = yaml.safe_load(f) or {"skills": []}
+                
                 return registry
         except Exception as e:
             click.echo(f"警告: 无法加载注册表: {e}", err=True)
             return {"skills": []}
-    else:
-        # 注册表不存在，初始化并添加默认技能
-        _ensure_default_skills()
-        # 重新加载
-        return _load_registry()
+    
+    # 如果还是不存在（可能因为权限问题或内置技能目录缺失），返回空结构而不是递归
+    return {"skills": []}
 
 
 def _save_registry(registry: Dict):
