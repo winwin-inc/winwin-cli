@@ -85,7 +85,7 @@ winwin-cli --help
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-username/winwin-cli.git
+git clone https://github.com/winwin-inc/winwin-cli.git
 cd winwin-cli
 
 # 安装依赖
@@ -381,7 +381,7 @@ winwin-cli/
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 克隆仓库
-git clone https://github.com/your-username/winwin-cli.git
+git clone https://github.com/winwin-inc/winwin-cli.git
 cd winwin-cli
 
 # 安装依赖
@@ -468,7 +468,7 @@ twine upload dist/*
 - [知识库配置示例](knowledge-bases.yaml)
 - [Claude Code 开发指南](CLAUDE.md)
 - [默认技能仓库](https://github.com/heibaibufen/winwin-skills)
-- [项目 Issue](https://github.com/your-username/winwin-cli/issues)
+- [项目 Issue](https://github.com/winwin-inc/winwin-cli/issues)
 
 ## 💡 使用场景
 
