@@ -54,6 +54,16 @@ winwin-cli 是一套专为 AI 使用设计的命令行工具集，提供知识�
 - **多平台支持** - Claude Code、OpenCode
 - **自动解析元数据** - 从 SKILL.md 提取技能信息
 
+### 🌐 web-search - 网络搜索工具
+
+为 AI 提供实时互联网搜索能力。
+
+- **多引擎支持** - 默认 DuckDuckGo (免费)，可选 Tavily (AI 优化)
+- **JSON 输出** - 结构化结果，便于 AI 解析
+- **灵活配置** - 支持自定义查询上限和 API Key 注入
+- **集成友好** - 非常适合作为 AI Agent 的搜索工具技能
+- **自动解析元数据** - 从 SKILL.md 提取技能信息
+
 ## 🚀 快速开始
 
 ### 安装
@@ -159,6 +169,22 @@ winwin-cli skills unregister skill-name
 
 # JSON 格式输出（AI 调用）
 winwin-cli skills list --json
+```
+
+**网络搜索：**
+
+```bash
+# 基础搜索（使用 DuckDuckGo）
+winwin-cli web-search search "Python 教程"
+
+# 指定结果数量
+winwin-cli web-search search "AI 新闻" --limit 10
+
+# JSON 输出（AI 专用）
+winwin-cli web-search search "winwin-cli" --json
+
+# 使用 Tavily 引擎（需 API Key）
+winwin-cli web-search search "最新技术" --provider tavily --api-key YOUR_KEY
 ```
 
 ## 📚 使用文档
@@ -331,6 +357,40 @@ author: Your Name
 # 技能使用说明
 
 ...
+```
+
+...
+```
+
+### web-search 详细用法
+
+```bash
+# 执行搜索
+winwin-cli web-search search "查询词"
+
+# 限制结果数量 (默认 5)
+winwin-cli web-search search "查询词" --limit 10
+
+# JSON 格式输出
+winwin-cli web-search search "查询词" --json
+
+# 指定搜索引擎 (duckduckgo, tavily)
+winwin-cli web-search search "查询词" --provider tavily
+
+# 提供 API Key (也可通过环境变量 TAVILY_API_KEY)
+winwin-cli web-search search "查询词" --provider tavily --api-key YOUR_TOKEN
+
+# 列出所有可用的搜索引擎后端
+winwin-cli web-search providers
+
+# 执行网页抓取 (转换为 Markdown)
+winwin-cli web-search fetch https://example.com
+
+# 抓取并保存到文件
+winwin-cli web-search fetch https://example.com -o article.md
+
+# 使用 Tavily AI 提取引擎 (效果更佳)
+winwin-cli web-search fetch https://example.com --provider tavily
 ```
 
 ## 🏗️ 项目结构

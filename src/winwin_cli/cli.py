@@ -33,6 +33,12 @@ def _import_skills():
     return skills
 
 
+def _import_web_search():
+    """延迟导入 web_search 模块"""
+    from winwin_cli.web_search.cli import web_search
+    return web_search
+
+
 # 注册子命令
 try:
     kb_search = _import_kb_search()
@@ -49,6 +55,12 @@ except ImportError:
 try:
     skills_cmd = _import_skills()
     main.add_command(skills_cmd, "skills")
+except ImportError:
+    pass
+
+try:
+    web_search_cmd = _import_web_search()
+    main.add_command(web_search_cmd, "web-search")
 except ImportError:
     pass
 
