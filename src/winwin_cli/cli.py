@@ -5,6 +5,14 @@ from typing import Optional
 import click
 
 
+# 自动注册内置技能（如果是新环境或注册丢失）
+try:
+    from winwin_cli.skills.cli import _ensure_default_skills
+    _ensure_default_skills()
+except Exception:
+    pass
+
+
 @click.group()
 @click.version_option(version="0.1.0")
 def main():

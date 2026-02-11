@@ -1,0 +1,18 @@
+[
+  {
+    "query": "搜索关于 Python 3.12 的新特性",
+    "commands": ["winwin-cli web-search search \"Python 3.12 new features\" --json"]
+  },
+  {
+    "query": "把这个网页爬下来转成 markdown: https://www.python.org",
+    "commands": ["winwin-cli web-search fetch https://www.python.org"]
+  },
+  {
+    "query": "列出当前可用的搜索引擎",
+    "commands": ["winwin-cli web-search providers"]
+  },
+  {
+    "query": "使用 Tavily 搜索最近的 AI 融资新闻，要 10 条结果",
+    "commands": ["winwin-cli web-search search \"latest AI funding news\" --provider tavily --limit 10 --json"]
+  }
+]
