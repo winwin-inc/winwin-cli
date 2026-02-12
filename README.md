@@ -207,6 +207,9 @@ winwin-cli kb-search index my-kb
 # 查看知识库状态
 winwin-cli kb-search status my-kb
 
+# 查看知识库详细信息
+winwin-cli kb-search info my-kb
+
 # 启用/禁用知识库
 winwin-cli kb-search enable my-kb
 winwin-cli kb-search disable my-kb
@@ -263,6 +266,13 @@ winwin-cli skills list --json
 ```bash
 # 取消注册技能
 winwin-cli skills unregister skill-name
+```
+
+**查看技能信息：**
+
+```bash
+# 显示技能详细信息（优先从注册表查找）
+winwin-cli skills info skill-name
 ```
 
 **安装技能：**
@@ -327,9 +337,11 @@ author: Your Name
 ...
 ```
 
+**批量注册技能集合：**
+
 ```
 owner/skills-repo/
-├── category1/          # 分类目录（如：heibai、xurui）
+├── category1/          # 分类目录
 │   ├── skill-a/       # 具体技能目录
 │   │   └── SKILL.md   # 必需：技能定义文件
 │   └── skill-b/
@@ -338,28 +350,6 @@ owner/skills-repo/
 │   └── skill-c/
 │       └── SKILL.md
 └── README.md
-```
-
-每个技能目录需要包含：
-- `SKILL.md` - 技能定义文件，包含 YAML 前置元数据
-- 可选的子目录（scripts、references、assets 等）
-
-示例 SKILL.md：
-
-```markdown
----
-name: my-skill
-description: 我的技能描述
-version: 1.0.0
-author: Your Name
----
-
-# 技能使用说明
-
-...
-```
-
-...
 ```
 
 ### web-search 详细用法
@@ -405,27 +395,31 @@ winwin-cli/
 │   ├── skills/          # 技能管理模块
 │   │   ├── __init__.py
 │   │   └── cli.py       # skills 命令（从 GitHub 仓库安装）
-│   └── kb_search/       # 知识库检索模块
-│       ├── cli.py       # kb-search 命令组
-│       ├── config.py    # 配置管理
-│       ├── indexer.py   # 文档索引
-│       ├── search.py    # 搜索引擎
-│       ├── models.py    # 数据模型
-│       ├── markitdown.py # 文档转换
-│       └── commands/    # 子命令实现
-│           ├── add.py
-│           ├── remove.py
-│           ├── index.py
-│           ├── search.py
-│           ├── list.py
-│           ├── enable.py
-│           ├── disable.py
-│           ├── status.py
-│           └── info.py
+│   ├── kb_search/       # 知识库检索模块
+│   │   ├── cli.py       # kb-search 命令组
+│   │   ├── config.py    # 配置管理
+│   │   ├── indexer.py   # 文档索引
+│   │   ├── search.py    # 搜索引擎
+│   │   ├── models.py    # 数据模型
+│   │   ├── markitdown.py # 文档转换
+│   │   └── commands/    # 子命令实现
+│   │       ├── add.py
+│   │       ├── remove.py
+│   │       ├── index.py
+│   │       ├── search.py
+│   │       ├── list.py
+│   │       ├── enable.py
+│   │       ├── disable.py
+│   │       ├── status.py
+│   │       └── info.py
+│   └── web_search/      # 网络搜索模块
+│       ├── cli.py       # web-search 命令组
+│       └── providers.py # 搜索引擎后端
 ├── tests/               # 测试文件
 │   ├── test_convert.py
 │   ├── test_kb_search_*.py
-│   └── test_skills.py
+│   ├── test_skills.py
+│   └── test_web_search.py
 ├── docs/                # 文档
 ├── pyproject.toml       # 项目配置
 ├── CLAUDE.md           # Claude Code 开发指南

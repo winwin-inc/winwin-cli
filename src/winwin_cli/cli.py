@@ -14,7 +14,7 @@ except Exception:
 
 
 @click.group()
-@click.version_option(version="0.1.0")
+@click.version_option(version="0.1.2")
 def main():
     """winwin-cli - CLI 封装工具，专为 AI 使用设计
 
